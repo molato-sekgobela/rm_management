@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Welcome, {{ request.user.username }}</h1>
+
+<h2>Clients and Document Requests</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Client Name</th>
+            <th>Email</th>
+            <th>Document Requests</th>
+            <th>Create Document Request</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for client in clients %}
+        <tr>
+            <td>{{ client.name }}</td>
+            <td>{{ client.email }}</td>
+            <td><a href="{% url 'client_document_requests' client.id %}">View Requests</a></td>
+            <td><a href="{% url 'create_request' client.id %}">Create Request</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No clients found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<a href="{% url 'add_client' %}">Add Client</a> | 
+<a href="{% url 'logout_view' %}" style="color: red;">Logout</a> <!-- This is the logout link -->
+
+{% endblock %}

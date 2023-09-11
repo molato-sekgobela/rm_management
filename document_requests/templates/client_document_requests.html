@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Document Requests for {{ client.name }}</h1>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Request ID</th>
+            <th>Date Created</th> <!-- New column header for Date Created -->
+            <th>Request Status</th>
+            <th>Uploaded Document</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for doc_request in document_requests %}
+        <tr>
+            <td>{{ doc_request.id }}</td>
+            <td>{{ doc_request.created_at|date:"F d, Y" }}</td> <!-- New column for Date Created -->
+            <td>{{ doc_request.is_completed|yesno:"Completed,In Progress" }}</td>
+            <td>
+                {% if doc_request.is_completed %}
+                    {% if doc_request.request_uuid %}
+                        <a href="{% url 'view_uploaded_documents' doc_request.request_uuid %}">View Document</a>
+                    {% else %}
+                        UUID missing!
+                    {% endif %}
+                {% else %}
+                    Not yet uploaded
+                {% endif %}
+            </td>
+            <td>
+                <!-- Delete button -->
+                <a href="{% url 'delete_document_request' doc_request.id %}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No document requests found</td> <!-- Updated colspan to 5 -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
+{% endblock %}

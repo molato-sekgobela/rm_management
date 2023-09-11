@@ -1,0 +1,6 @@
+<h2>Are you sure you want to delete this request?</h2>
+<form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Yes, Delete">
+    <a href="{% url 'client_document_requests' object.client.id %}">Cancel</a>
+</form>

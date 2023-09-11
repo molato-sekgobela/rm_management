@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Upload Document</h2>
+<form method="post" action="{% url 'upload_document' uuid %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.file_1.label_tag }}: {{ form.file_1 }}
+    {{ form.file_2.label_tag }}: {{ form.file_2 }}
+    {{ form.file_3.label_tag }}: {{ form.file_3 }}
+
+    <input type="submit" value="Upload">
+</form>
+{% endblock %}

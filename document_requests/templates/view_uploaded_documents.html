@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Uploaded Documents for Request: {{ doc_request.id }}</h2>
+<ul>
+    {% for doc in uploaded_docs %}
+    <li>
+        <a href="{{ doc.document.url }}" target="_blank">{{ doc.document.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
