@@ -93,7 +93,7 @@ class CreateRequestView(FormView):
         send_mail(
             'Document Upload Request',
             f'Please click here {upload_link} for instructions on document upload',
-            'from_email@example.com',
+            'rmmanage@example.com',
             [self.client.email],
             fail_silently=False,
         )
@@ -194,7 +194,7 @@ class AddClientView(FormView):
         send_mail(
             'Verify Your Email',
             f'Click the link to verify your email: {verification_url}',
-            'from_email@example.com',
+            'rmmanage@example.com',
             [client.email],
             fail_silently=False,
         )
