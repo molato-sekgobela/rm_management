@@ -25,6 +25,20 @@ class UploadDocumentForm(forms.Form):
                 validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
                 required=True
             )
+    def clean_file(self, file_field_name):
+        file = self.cleaned_data.get(file_field_name)
+        if file and not file.name.endswith('.pdf'):
+            raise forms.ValidationError("Only PDF files are allowed.")
+        return file
+
+    def clean_file_1(self):
+        return self.clean_file('file_1')
+
+    def clean_file_2(self):
+        return self.clean_file('file_2')
+
+    def clean_file_3(self):
+        return self.clean_file('file_3')
 
 # Form for adding a new client
 class ClientForm(forms.ModelForm):

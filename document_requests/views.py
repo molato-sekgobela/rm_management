@@ -124,27 +124,6 @@ class UploadDocumentView(FormView):
         kwargs["num_files"] = 3  # Assuming 3 files by default
         return kwargs
     
-    def clean_file_2(self):
-        file = self.cleaned_data.get('file_1')
-        if file:
-            if not file.name.endswith('.pdf'):
-                raise FormView.ValidationError("Only PDF files are allowed.")
-        return file
-    
-    def clean_file_2(self):
-        file = self.cleaned_data.get('file_2')
-        if file:
-            if not file.name.endswith('.pdf'):
-                raise FormView.ValidationError("Only PDF files are allowed.")
-        return file
-    
-    def clean_file_3(self):
-        file = self.cleaned_data.get('file_3')
-        if file:
-            if not file.name.endswith('.pdf'):
-                raise FormView.ValidationError("Only PDF files are allowed.")
-        return file
-
     def form_valid(self, form):
         """On form validation, save uploaded documents and notify RM."""
         self.doc_request = get_object_or_404(DocumentRequest, request_uuid=self.kwargs['uuid'])
