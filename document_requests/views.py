@@ -106,6 +106,14 @@ class UploadDocumentView(FormView):
     form_class = UploadDocumentForm
     success_url = reverse_lazy('upload_success')
 
+    def dispatch(self, request, *args, **kwargs):
+        self.doc_request = get_object_or_404(DocumentRequest, request_uuid=kwargs['uuid'])
+        
+        if self.doc_request.link_used:
+            return HttpResponse("This link has already been used. You can't upload again.")
+        
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["uuid"] = self.kwargs['uuid']
@@ -115,25 +123,46 @@ class UploadDocumentView(FormView):
         kwargs = super().get_form_kwargs()
         kwargs["num_files"] = 3  # Assuming 3 files by default
         return kwargs
+    
+    def clean_file_2(self):
+        file = self.cleaned_data.get('file_1')
+        if file:
+            if not file.name.endswith('.pdf'):
+                raise FormView.ValidationError("Only PDF files are allowed.")
+        return file
+    
+    def clean_file_2(self):
+        file = self.cleaned_data.get('file_2')
+        if file:
+            if not file.name.endswith('.pdf'):
+                raise FormView.ValidationError("Only PDF files are allowed.")
+        return file
+    
+    def clean_file_3(self):
+        file = self.cleaned_data.get('file_3')
+        if file:
+            if not file.name.endswith('.pdf'):
+                raise FormView.ValidationError("Only PDF files are allowed.")
+        return file
 
     def form_valid(self, form):
         """On form validation, save uploaded documents and notify RM."""
-        doc_request = get_object_or_404(DocumentRequest, request_uuid=self.kwargs['uuid'])
+        self.doc_request = get_object_or_404(DocumentRequest, request_uuid=self.kwargs['uuid'])
         for i in range(1, 4):  # Assuming 3 files
             field_name = f'file_{i}'
             uploaded_file = form.cleaned_data.get(field_name)
             if uploaded_file:
-                UploadedDocument.objects.create(document_request=doc_request, document=uploaded_file)
+                UploadedDocument.objects.create(document_request=self.doc_request, document=uploaded_file)
 
-        doc_request.is_completed = True
-        doc_request.link_used = True
-        doc_request.save()
+        self.doc_request.is_completed = True
+        self.doc_request.link_used = True
+        self.doc_request.save()
 
-        rm_email = doc_request.client.rm.email
+        rm_email = self.doc_request.client.rm.email
         send_mail(
             'Document Successfully Uploaded',
-            f'A document for {doc_request.client.name} was successfully uploaded.',
-            'from_email@example.com',
+            f'A document for {self.doc_request.client.name} was successfully uploaded.',
+            'rmmanage@example.com',
             [rm_email],
             fail_silently=False,
         )
