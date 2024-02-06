@@ -26,12 +26,12 @@ Tech Assignment (FutureForex)
 RM email access:
     url: https://joseph.happychappy.com/roundcube/?_task=login&_err=session
     username: rm@techwithmolato.co.za
-    password: 948025466Mp@
+    password: 
 
 Client email access:
     url: https://joseph.happychappy.com/roundcube/?_task=login&_err=session
     username: cisconetworks@techwithmolato.co.za
-    password: 948025466Mp@
+    password: 
 
 
 
